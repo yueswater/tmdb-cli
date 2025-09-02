@@ -134,25 +134,6 @@ poetry run pytest
 * `python-dotenv`: For reading `.env` API key
 * `pytest`: For unit testing (in dev group)
 
-
-
-## Makefile (Optional)
-
-You can define shortcuts in a `Makefile`:
-
-```makefile
-popular:
-	poetry run tmdb-app --type popular
-
-top:
-	poetry run tmdb-app --type top
-
-test:
-	poetry run pytest
-```
-
-
-
 ## License
 
 This project is open-source and available under the [MIT License](LICENSE).
