@@ -1,110 +1,90 @@
-# Task Tracker CLI
+# TMDB CLI App
 
-A simple command-line task tracker for managing your to-do list directly from the terminal.  
-This project was built as a learning exercise following the specifications from [roadmap.sh](https://roadmap.sh/projects/task-tracker).
+A simple command-line interface (CLI) tool for fetching and displaying movie information from [The Movie Database (TMDB)](https://www.themoviedb.org/). This application allows users to browse movies by category (e.g. now playing, popular, top rated, and upcoming) directly from the terminal.
+
+This project is built with Python, uses the TMDB v4 API with Bearer Token authentication, and formats the output into clean tables using the `tabulate` package.
 
 
 
 ## Features
 
-- Add new tasks
-- List tasks by status (`todo`, `in-progress`, `done`)
-- Update task descriptions
-- Mark tasks as in progress or done
-- Delete tasks
-- All data is stored in a local `tasks.json` file
+- Fetches data from the official [TMDB API](https://developer.themoviedb.org/)
+- Supports 4 types of movie categories:
+  - `playing`: Currently playing movies
+  - `popular`: Most popular movies
+  - `top`: Top-rated movies
+  - `upcoming`: Upcoming movie releases
+- Outputs data in a formatted table
+- Handles network and API errors gracefully
+- Uses `.env` file to store your API key securely
+- Written with clean code structure using the `src/` layout
+- Fully tested using `pytest` and `unittest.mock`
+
+
+
+## Demo
+
+```bash
+poetry run tmdb-app --type popular
+````
+
+Returns a table like:
+
+```
+╒═══════════════════════════════╤══════════════╤══════════╤════════════════════════════════════════════════════════╕
+│ Title                         │ Release Date │ Rating   │ Overview                                               │
+├───────────────────────────────┼──────────────┼──────────┼────────────────────────────────────────────────────────┤
+│ War of the Worlds             │ 2025-07-29   │ 4.323    │ Will Radford is a top analyst for Homeland Security... │
+│ F1                            │ 2025-06-25   │ 7.815    │ Racing legend Sonny Hayes is coaxed out of retirem...  │
+╘═══════════════════════════════╧══════════════╧══════════╧════════════════════════════════════════════════════════╛
+```
 
 
 
 ## Installation
 
-This project uses [Poetry](https://python-poetry.org/) for dependency management.
+This project uses [Poetry](https://python-poetry.org/) for dependency and environment management.
+
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yueswater/task-tracker-cli.git
-cd task-tracker-cli
+git clone https://github.com/your-username/tmdb-cli-app.git
+cd tmdb-cli-app
+```
+
+### 2. Install Dependencies
+
+```bash
 poetry install
-````
+```
+
+### 3. Add Your TMDB API Key
+
+Go to your [TMDB account settings](https://www.themoviedb.org/settings/api), and copy your **v4 access token (Bearer Token)**.
+
+Create a `.env` file in the project root:
+
+```
+TMDB_API_KEY=your_bearer_token_here
+```
+
+Make sure the token starts with `ey...`, not a legacy v3 key.
 
 
 
 ## Usage
 
-Once installed, you can use the CLI via:
+Run the CLI using:
 
 ```bash
-poetry run task-cli <command> [arguments]
+poetry run tmdb-app --type [playing|popular|top|upcoming]
 ```
 
-
-
-### Commands
-
-#### `add`
-
-Add a new task:
+Examples:
 
 ```bash
-task-cli add "Buy groceries"
-```
-
-#### `list`
-
-List all tasks:
-
-```bash
-task-cli list
-```
-
-List only tasks of a certain status:
-
-```bash
-task-cli list todo
-task-cli list done
-task-cli list in-progress
-```
-
-#### `update`
-
-Update the description of a task:
-
-```bash
-task-cli update 3 "Buy groceries and cook dinner"
-```
-
-#### `mark-done`
-
-Mark a task as done:
-
-```bash
-task-cli mark-done 3
-```
-
-#### `mark-in-progress`
-
-Mark a task as in progress:
-
-```bash
-task-cli mark-in-progress 3
-```
-
-#### `delete`
-
-Delete a task:
-
-```bash
-task-cli delete 3
-```
-
-
-
-## Example Output
-
-```bash
-$ task-cli list
-[1] todo         Buy groceries
-[2] in-progress  Write documentation
-[3] done         Submit report
+poetry run tmdb-app --type playing
+poetry run tmdb-app --type top
 ```
 
 
@@ -112,34 +92,76 @@ $ task-cli list
 ## Project Structure
 
 ```
-task-tracker-cli/
-├── src/
-│   └── task_cli/
-│       ├── app.py
-│       ├── models/
-│       ├── services/
-│       └── storage/
-├── tests/
-├── Makefile
+tmdb-cli/
 ├── pyproject.toml
+├── Makefile
+├── .env
 ├── README.md
+├── src/
+│   └── tmdb_cli/
+│       ├── api.py         # Handles API requests to TMDB
+│       ├── app.py         # CLI entrypoint (main function)
+│       └── display.py     # Output formatting using tabulate
+├── tests/
+│   ├── test_api.py        # Unit tests for API fetching
+│   └── __init__.py
+└── notebook/
+    └── main.ipynb         # (Optional) Exploration notebook
 ```
 
 
 
-## Testing
+## Development
 
-Run the full test suite with coverage:
+### Run the CLI
 
 ```bash
-make test
-make coverage
+poetry run tmdb-app --type popular
 ```
 
-All tests are located under the `tests/` directory and use `pytest` with `pytest-cov`.
+### Run Tests
+
+```bash
+poetry run pytest
+```
+
+
+
+## Dependencies
+
+* `requests`: For making HTTP requests
+* `tabulate`: For rendering terminal tables
+* `python-dotenv`: For reading `.env` API key
+* `pytest`: For unit testing (in dev group)
+
+
+
+## Makefile (Optional)
+
+You can define shortcuts in a `Makefile`:
+
+```makefile
+popular:
+	poetry run tmdb-app --type popular
+
+top:
+	poetry run tmdb-app --type top
+
+test:
+	poetry run pytest
+```
 
 
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is open-source and available under the [MIT License](LICENSE).
+
+
+
+## Acknowledgments
+
+* [TMDB API](https://developer.themoviedb.org/)
+* [Roadmap.sh Projects](https://roadmap.sh/projects/tmdb-cli)
+
+```
