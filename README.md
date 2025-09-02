@@ -144,5 +144,3 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 * [TMDB API](https://developer.themoviedb.org/)
 * [Roadmap.sh Projects](https://roadmap.sh/projects/tmdb-cli)
-
-```
